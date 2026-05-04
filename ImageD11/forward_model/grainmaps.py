@@ -1378,7 +1378,7 @@ def DS_KAM_and_GB(DS, kernel_size=5, kernel_cutoff=50, tol_dist=1.732, crystal_s
             Umis_list = ['triclinic', 'monoclinic', 'orthorhombic',
                          'tetragonal', 'trigonal', 'hexagonal', 'cubic']
             n_Umis = Umis_list.index(crystal_system.lower()) + 1
-        except Expection as e:
+        except Exception as e:
             print("Failed to use xfab.symmetry.Umis: {}".format(e))
             print("Switching to use grainmaps.disorientation_list")
             Umis_flag = False
@@ -1470,11 +1470,10 @@ def DS_KAM_and_GB(DS, kernel_size=5, kernel_cutoff=50, tol_dist=1.732, crystal_s
             a[1].set_title('(b) KAM with grain boundary (deg)')
             a[1].set_xlabel('Lab X axis --->')
             a[1].set_ylabel('Lab Y axis --->')
-            im_overlay = np.zeros((*GB_map['mask'].shape[1:], 4))
+            im_overlay = np.zeros(GB_map['mask'].shape[1:] + (4,))
             im_overlay[GB_map['mask'][0,...]] = [1, 1, 1, 1]  # white with 0% transparency
             # Overlay on the existing plot
             a[1].imshow(im_overlay, origin='lower', alpha=0.95)
-            #a[1].contour(GB_map['mask'][0,...], levels=[0.5], colors='black', linewidths=1.0, alpha=0.8)
             plt.colorbar(im, ax=a[1], fraction=0.046, pad=0.04)
             
             im = a[2].imshow(KAM_map[0,:,:], origin='lower')
